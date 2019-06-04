@@ -1,0 +1,15 @@
+{
+  "name": "react-galery-app",
+  "version": "1.0.0",
+  "description": "A gallery app made with React that uses Flickr`s API",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Otavio Araujo",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
