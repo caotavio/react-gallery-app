@@ -19,11 +19,11 @@ const navLinkNames = [
 
 const Header = (props) => {
     return(
-        <header>
-            <Form />
+        <div>
+            <Form onSearch={props.onSearch} />
             <Nav initialNavLinks={navLinkNames}/>
             <h2>{props.title}</h2>
-        </header>
+        </div>
     );
 }
 
