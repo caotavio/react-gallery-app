@@ -16,21 +16,49 @@ class App extends Component {
 
     constructor(props) {
         super(props);
+
+        // binds the performSearch method to the this keyword, so this,setState inside the response in axios will work
+        this.performSearch = this.performSearch.bind(this);
+
         this.state = {
+            programmer: [],
+            matrix: [],
+            dogs: [],
             images: []
         };
     }
 
     componentDidMount() {
-        this.performSearch();
+        this.performSearch('programmer');
+        this.performSearch('matrix');
+        this.performSearch('dogs');
     }
 
-    performSearch(query = "programmer") {
+    performSearch(query) {
         axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apikey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
             .then(response => {
-                this.setState({
-                    images: response.data.photos.photo
-                })
+                switch(query) {
+                    case "programmer":
+                        this.setState({
+                            programmer: response.data.photos.photo
+                        })
+                        break;
+                    case "matrix":
+                        this.setState({
+                            matrix: response.data.photos.photo
+                        })
+                        break;
+                    case "dogs":
+                        this.setState({
+                            dogs: response.data.photos.photo
+                        })
+                        break;
+                    default:
+                        this.setState({
+                            images: response.data.photos.photo
+                        })
+                        break;
+                }
             })
             .catch(error => {
                 console.log('Error fetching and parsing data', error);
@@ -47,9 +75,9 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/" component={Home}/>
                         <Route path="/search" render={(props)=><Gallery {...props} data={this.state.images} />}/>
-                        {/* <Route />
-                        <Route />
-                        <Route /> */}
+                        <Route path="/programmer" render={(props)=><Gallery {...props} data={this.state.programmer} />}/>
+                        <Route path="/matrix" render={(props)=><Gallery {...props} data={this.state.matrix} />}/>
+                        <Route path="/dogs" render={(props)=><Gallery {...props} data={this.state.dogs} />}/>
                         <Route component={NotFound}/>
                     </Switch>
                     {/* Switch will only render the first route that matches the url... and if it don`t find any route, it will fall
