@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+//inside the ul there is an iteration of the NavLinkNames array which will display as many nav links as the user add to the array.
 const Nav = (props) => {
     return (
         <div>

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+/*the form needs to redirect the user but as it is being used by the header, it is not wrapped in a Route tag. To get around it 
+we import and wrap the export in a withRouter function, which gives Form access to the this.props.history, letting it redirect
+the user.*/
 
 class Form extends Component {
 
@@ -7,17 +10,19 @@ class Form extends Component {
         value: ''
     };
 
+    //this function tracks and updates the changes made in the input 
     onSearchChange = (e) => {
         this.setState({ value: e.target.value });
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let value = this.query.value;
-        let path = `/${value}`;
+        //search and path will creat a new route from the query
+        let search = this.query.value;
+        let path = `search/${search}`;
         this.props.history.push(path);
-        this.props.onSearch(this.query.value);
-        this.setState({ value: '' });
+        this.props.onSearch(search);
+        e.currentTarget.reset();
     }
 
     render() {
@@ -28,7 +33,6 @@ class Form extends Component {
                     <input
                         type="search"
                         name="search"
-                        // value={this.state.value}
                         onChange={this.onSearchChange}
                         ref={(input) => this.query = input}
                         placeholder="Search"

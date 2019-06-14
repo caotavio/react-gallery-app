@@ -17,14 +17,15 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        // binds the performSearch method to the this keyword, so this,setState inside the response in axios will work
+        // binds the performSearch method to the this keyword, so this.SetState inside the response in axios will work
         this.performSearch = this.performSearch.bind(this);
 
         this.state = {
             programmer: [],
             matrix: [],
             dogs: [],
-            images: []
+            images: [],
+            loading: true
         };
     }
 
@@ -40,22 +41,26 @@ class App extends Component {
                 switch(query) {
                     case "programmer":
                         this.setState({
-                            programmer: response.data.photos.photo
+                            programmer: response.data.photos.photo,
+                            loading: false
                         })
                         break;
                     case "matrix":
                         this.setState({
-                            matrix: response.data.photos.photo
+                            matrix: response.data.photos.photo,
+                            loading: false
                         })
                         break;
                     case "dogs":
                         this.setState({
-                            dogs: response.data.photos.photo
+                            dogs: response.data.photos.photo,
+                            loading: false
                         })
                         break;
                     default:
                         this.setState({
-                            images: response.data.photos.photo
+                            images: response.data.photos.photo,
+                            loading: false
                         })
                         break;
                 }
@@ -66,22 +71,27 @@ class App extends Component {
     }
 
     render() {
-        console.log(this.state.images);
         return (
             <BrowserRouter>
                 <div className="container">
-                    <Header onSearch={this.performSearch} /> {/* dinamically serve the input name when loaded as a title property in Header
-                    that evertything that is not text should me put btw {} because it is a JSX expression*/}
-                    <Switch>
-                        <Route exact path="/" component={Home}/>
-                        <Route path="/search" render={(props)=><Gallery {...props} data={this.state.images} />}/>
-                        <Route path="/programmer" render={(props)=><Gallery {...props} data={this.state.programmer} />}/>
-                        <Route path="/matrix" render={(props)=><Gallery {...props} data={this.state.matrix} />}/>
-                        <Route path="/dogs" render={(props)=><Gallery {...props} data={this.state.dogs} />}/>
-                        <Route component={NotFound}/>
-                    </Switch>
-                    {/* Switch will only render the first route that matches the url... and if it don`t find any route, it will fall
-                    back to the not found comp. */}
+                    <Header onSearch={this.performSearch} /> {/* dinamically serve the input name when loaded as a title property in 
+                    Header that evertything that is not text should me put btw {} because it is a JSX expression*/}
+                    {
+                        /*ternary operator to determine if the state`s loading property is true... if it not true it will return
+                        whichever route is rendered inside switch.*/
+                        (this.state.loading)
+                        ? <p>Loading...</p>
+                        :<Switch>
+                            <Route exact path="/" component={Home}/>
+                            <Route path="/search" render={(props)=><Gallery data={this.state.images} />}/>
+                            <Route path="/programmer" render={(props)=><Gallery data={this.state.programmer} />}/>
+                            <Route path="/matrix" render={(props)=><Gallery data={this.state.matrix} />}/>
+                            <Route path="/dogs" render={(props)=><Gallery data={this.state.dogs} />}/>
+                            <Route component={NotFound}/>
+                        </Switch>
+                    }
+                    {/* Switch will only render the first route that matches the url... and if it doesn`t find any route, it will fall
+                    back to the NotFound comp. */}
                 </div>
             </BrowserRouter>
         );

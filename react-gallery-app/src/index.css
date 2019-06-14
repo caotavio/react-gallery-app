@@ -77,6 +77,8 @@ input {
   height: 165px;
   overflow: hidden;
   margin-bottom: 15px;
+  padding:1px;
+  border:1px solid #021a40;
 }
 
 .photo-container ul img {
@@ -92,6 +94,11 @@ input {
 
 .photo-container .not-found {
   width: 100%;
+}
+
+.error {
+  width: 100%;
+  color: red;
 }
 
 @media only screen and (max-width: 767px)  {
