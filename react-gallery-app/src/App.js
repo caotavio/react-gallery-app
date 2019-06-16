@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios'; //axios automatically returns the response in JSON
+import Axios from 'axios'; //axios automatically returns the response in JSON
 import {
     BrowserRouter,
     Route,
@@ -17,7 +17,8 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        // binds the performSearch method to the this keyword, so this.SetState inside the response in axios will work
+        // binds the performSearch and loadHandler methods to the this keyword, so this.SetState inside the response in axios will work
+        this.loadHandler = this.loadHandler.bind(this);
         this.performSearch = this.performSearch.bind(this);
 
         this.state = {
@@ -35,8 +36,14 @@ class App extends Component {
         this.performSearch('dogs');
     }
 
+    loadHandler() {
+        this.setState({
+            loading: true
+        })
+    }
+
     performSearch(query) {
-        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apikey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
+        Axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apikey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
             .then(response => {
                 switch(query) {
                     case "programmer":
@@ -74,7 +81,7 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <div className="container">
-                    <Header onSearch={this.performSearch} /> {/* dinamically serve the input name when loaded as a title property in 
+                    <Header handler={this.loadHandler} onSearch={this.performSearch} /> {/* dinamically serve the input name when loaded as a title property in 
                     Header that evertything that is not text should me put btw {} because it is a JSX expression*/}
                     {
                         /*ternary operator to determine if the state`s loading property is true... if it not true it will return
@@ -83,10 +90,10 @@ class App extends Component {
                         ? <p>Loading...</p>
                         :<Switch>
                             <Route exact path="/" component={Home}/>
-                            <Route path="/search" render={(props)=><Gallery data={this.state.images} />}/>
-                            <Route path="/programmer" render={(props)=><Gallery data={this.state.programmer} />}/>
-                            <Route path="/matrix" render={(props)=><Gallery data={this.state.matrix} />}/>
-                            <Route path="/dogs" render={(props)=><Gallery data={this.state.dogs} />}/>
+                            <Route path="/search/:term" render={(props)=><Gallery {...props} loading={this.state.loading} data={this.state.images} />}/>
+                            <Route path="/programmer" render={(props)=><Gallery {...props} loading={this.state.loading} data={this.state.programmer} />}/>
+                            <Route path="/matrix" render={(props)=><Gallery {...props} loading={this.state.loading} data={this.state.matrix} />}/>
+                            <Route path="/dogs" render={(props)=><Gallery {...props} loading={this.state.loading} data={this.state.dogs} />}/>
                             <Route component={NotFound}/>
                         </Switch>
                     }

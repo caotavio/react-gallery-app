@@ -17,11 +17,12 @@ class Form extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        //search and path will creat a new route from the query
-        let search = this.query.value;
-        let path = `search/${search}`;
+        //term and path will creat a new route from the query
+        let term = this.query.value;
+        let path = `search/${term}`;
         this.props.history.push(path);
-        this.props.onSearch(search);
+        this.props.onSearch(term);
+        this.props.handler();
         e.currentTarget.reset();
     }
 

@@ -20,7 +20,7 @@ const navLinkNames = [
 const Header = (props) => {
     return(
         <div>
-            <Form onSearch={props.onSearch} />
+            <Form handler={props.handler} onSearch={props.onSearch} />
             <Nav initialNavLinks={navLinkNames}/>
             <h2>{props.title}</h2>
         </div>
